@@ -47,11 +47,19 @@ export const Login = () => {
     if (response) {
       setShowErr(false);
       console.log('response:', response.data[0]);
+      localStorage.setItem('expertiaUser', response.data[0]);
+      window.location.reload();
+
+      //todo Navigate to Job Listings
     }
   };
 
   return (
     <Box w={'30%'} m={'2rem auto'} textAlign="center">
+      <Text as="mark" fontSize="2xl" fontWeight={'bold'}>
+        Login
+      </Text>
+
       <FormControl>
         {/* //* Email Input */}
         <FormLabel>Email address</FormLabel>

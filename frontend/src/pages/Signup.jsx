@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react';
 
 export const Signup = () => {
-  let link = 'http://localhost:8080/auth/login';
+  let link = 'http://localhost:8080/auth/signup';
 
   //! password show change state
   const [show, setShow] = useState(false);
@@ -46,12 +46,19 @@ export const Signup = () => {
 
     if (response) {
       setShowErr(false);
-      console.log('response:', response.data[0]);
+      alert(response.data.message);
+      console.log('response:', response.data.message);
+
+      //todo Navigate to Login
     }
   };
 
   return (
     <Box w={'30%'} m={'2rem auto'} textAlign="center">
+      <Text as="mark" fontSize="2xl" fontWeight={'bold'}>
+        Signup
+      </Text>
+
       <FormControl>
         {/* //* Email Input */}
         <FormLabel>Email address</FormLabel>
@@ -86,7 +93,7 @@ export const Signup = () => {
 
         {showErr ? (
           <FormHelperText color={'red'}>
-            Recheck the entered values.
+            Email already registered. Please login directly.
           </FormHelperText>
         ) : (
           <FormHelperText color={'white'}>

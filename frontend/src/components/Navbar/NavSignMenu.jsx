@@ -1,4 +1,5 @@
-import React from 'react';
+import { useEffect } from 'react';
+import axios from 'axios';
 
 //~ Chakra
 import {
@@ -16,6 +17,8 @@ import {
 } from '@chakra-ui/react';
 
 export const NavSignMenu = () => {
+  let userDetails = localStorage.getItem('expertiaUser') || '';
+
   return (
     <VStack>
       <Menu>
@@ -32,28 +35,39 @@ export const NavSignMenu = () => {
           />
         </MenuButton>
         <MenuList>
-          <MenuItem>
-            {/* <Link1 to="/login">Log In</Link1> */}
-            <p>Log In</p>
-          </MenuItem>
-          <MenuItem>
-            {/* <Link1 to="/signup">Sign up</Link1> */}
-            <p>Sign up</p>
-          </MenuItem>
-          <MenuDivider />
-          <MenuItem
-            onClick={() => {
-              // localStorage.removeItem('userid');
-              // window.location.reload();
-            }}
-          >
-            Sign Out
-          </MenuItem>
+          {!userDetails ? (
+            <>
+              <MenuItem>
+                {/* <Link1 to="/login">Log In</Link1> */}
+                <p>Log In</p>
+              </MenuItem>
+              <MenuDivider />
+              <MenuItem>
+                {/* <Link1 to="/signup">Sign up</Link1> */}
+                <p>Sign up</p>
+              </MenuItem>
+            </>
+          ) : (
+            <MenuItem
+              onClick={() => {
+                localStorage.removeItem('expertiaUser');
+                window.location.reload();
+              }}
+            >
+              Sign Out
+            </MenuItem>
+          )}
         </MenuList>
       </Menu>
 
-      {/* //* Username */}
-      <Text>Signup / Login</Text>
+      {/* //* User unique ID */}
+      {!userDetails ? (
+        <Text>Signup / Login</Text>
+      ) : (
+        <>
+          <Text>Unique user ID: </Text> <Text>{userDetails}</Text>
+        </>
+      )}
     </VStack>
   );
 };

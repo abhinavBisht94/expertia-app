@@ -24,9 +24,13 @@ export const Navbar = () => {
           />
         </Box>
 
-        <Button colorScheme='facebook' variant='outline'>Job Listings</Button>
+        <Button colorScheme="facebook" variant="outline">
+          Job Listings
+        </Button>
 
-        <Button colorScheme='facebook' variant='outline'>Job Applications</Button>
+        <Button colorScheme="facebook" variant="outline">
+          Job Applications
+        </Button>
 
         {/* //* Sign in - Login - Logout Menu */}
         <NavSignMenu />

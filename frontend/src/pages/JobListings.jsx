@@ -12,6 +12,11 @@ import data from '../API/db.json';
 export const JobListings = () => {
   const { jobs } = data;
 
+  //! Applying for job
+  const handleApply = jobName => {
+    console.log('jobName:', jobName);
+  };
+
   return (
     <Box>
       {jobs.map((elem, index) => {
@@ -26,7 +31,14 @@ export const JobListings = () => {
               {elem.job_name}
             </Text>
 
-            <Button colorScheme="cyan">Apply</Button>
+            <Button
+              colorScheme="cyan"
+              onClick={() => {
+                handleApply(elem.job_name);
+              }}
+            >
+              Apply
+            </Button>
             {/* <Text>Login to apply</Text> */}
           </HStack>
         );
