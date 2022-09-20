@@ -12,6 +12,7 @@ import {
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { Navbar } from './pages/Navbar';
 import { JobListings } from './pages/JobListings';
+import { Login } from './pages/Login';
 
 function App() {
   return (
@@ -21,7 +22,9 @@ function App() {
       <Box>
         <Navbar />
 
-        <JobListings />
+        {/* <JobListings /> */}
+
+        <Login />
       </Box>
     </ChakraProvider>
   );
