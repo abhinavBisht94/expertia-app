@@ -10,6 +10,8 @@ import {
   theme,
 } from '@chakra-ui/react';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
+import { Navbar } from './pages/Navbar';
+import { JobListings } from './pages/JobListings';
 
 function App() {
   return (
@@ -17,7 +19,9 @@ function App() {
       {/* <ColorModeSwitcher justifySelf="flex-end" /> */}
 
       <Box>
-        <Box></Box>
+        <Navbar />
+
+        <JobListings />
       </Box>
     </ChakraProvider>
   );
