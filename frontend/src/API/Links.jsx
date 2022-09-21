@@ -1,3 +1,3 @@
 export const links = {
-  expertiaLink: 'http://localhost:8080',
+  expertiaLink: 'https://expertia-app.herokuapp.com/',
 };
