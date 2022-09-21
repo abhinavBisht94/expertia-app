@@ -5,8 +5,6 @@ import axios from 'axios';
 import {
   Box,
   Text,
-  Flex,
-  Image,
   Button,
   FormControl,
   FormLabel,
@@ -16,8 +14,17 @@ import {
   InputGroup,
 } from '@chakra-ui/react';
 
+//~ Routing
+import { useNavigate } from 'react-router-dom';
+
+//~ LINKS
+import { links } from '../API/Links';
+
 export const Signup = () => {
-  let link = 'http://localhost:8080/auth/signup';
+  let { expertiaLink } = links;
+
+  //! Routing
+  const navigate = useNavigate();
 
   //! password show change state
   const [show, setShow] = useState(false);
@@ -39,7 +46,8 @@ export const Signup = () => {
   const handleSubmit = async () => {
     console.log('login user', user);
 
-    let response = await axios.post(link, user).catch(err => {
+    let URL = expertiaLink + `/auth/signup`;
+    let response = await axios.post(URL, user).catch(err => {
       console.log('err:', err.response.data.message);
       setShowErr(true);
     });
@@ -47,9 +55,9 @@ export const Signup = () => {
     if (response) {
       setShowErr(false);
       alert(response.data.message);
-      console.log('response:', response.data.message);
 
-      //todo Navigate to Login
+      //Navigate
+      navigate('/login');
     }
   };
 
@@ -89,8 +97,8 @@ export const Signup = () => {
           </InputRightElement>
         </InputGroup>
 
-        {/* //* Wrong Email or password prompt */}
 
+        {/* //* Wrong Email or password prompt */}
         {showErr ? (
           <FormHelperText color={'red'}>
             Email already registered. Please login directly.

@@ -4,58 +4,121 @@ const { Router } = require("express");
 const createError = require("http-errors");
 
 const UserSchema = require("../models/UserModel");
-const TaskModel = require("../models/TaskModel");
 const JobModel = require("../models/JobModel");
 
 const jobRouter = Router();
 
 //---------------------------------------
+
 //* CRUD Operations
-jobRouter.post("/:userid", async (req, res) => {
-  const { userid } = req.params;
-  //   console.log("userid:", userid);
 
-  //! "POST" the received task
-  let receivedTask = req.body;
-  receivedTask.userid = userid;
-  //   console.log("receivedTask:", receivedTask);
-
-  const sendTask = await new TaskModel(receivedTask);
-  sendTask.save((err, success) => {
-    if (err) {
-      res.status(500).send({ message: "Error occurred" });
-    }
-    // console.log("success:", success);
-    return res.status(201).send({ message: "Todo/task saved" });
+//& Get all the job application of a user
+jobRouter.get("/:userid", async (req, res) => {
+  const expertiaUser = req.params.userid;
+  //! "GET" all task based on userid
+  let searchResult = await JobModel.find({
+    userid: { $regex: expertiaUser },
   });
+
+  let sendArr = [];
+  searchResult.map((elem) => {
+    if (elem.userId === expertiaUser) {
+      sendArr = elem.jobsApplied;
+    }
+  });
+
+  return res.status(201).send(sendArr);
 });
 
-// jobRouter.get("/:userid", async (req, res) => {
-//   const { userid } = req.params;
-//   console.log("userid:", userid);
-
-//   //! "GET" all task based on userid
-
-//   let searchResult = await TaskModel.find({
-//     userid: { $regex: userid },
-//   });
-//   console.log("searchResult:", [...searchResult]);
-
-//   return res.status(201).send(searchResult);
-// });
-
-// jobRouter.delete("/:userid/:taskid", async (req, res) => {
-//   const { userid, taskid } = req.params;
-
-//   //! "DELETE" that particular task
-//   let deletedTask = await TaskModel.deleteOne({ _id: [taskid] });
-//   console.log("deletedTask:", deletedTask);
-
-//   //! "GET" all task based on userid
-//   let searchResult = await TaskModel.find({ id: [userid] });
-//   //   console.log("searchResult:", searchResult);
-//   return res.status(201).send(searchResult);
-// });
 //---------------------------------------
+
+//& Updating the value in the jobsApplied
+jobRouter.post("/:userid", async (req, res) => {
+  const expertiaUser = req.params.userid;
+
+  //! "GET" all task based on userid
+  let searchResult = await JobModel.find({
+    userid: { $regex: expertiaUser },
+  });
+  let userArr = {};
+  searchResult.map((elem) => {
+    if (elem.userId === expertiaUser) {
+      userArr = elem;
+    }
+  });
+
+  //! "UPDATE" that particular user's job application
+  let appliedJobsId = userArr._id;
+
+  let newJobsArr = userArr.jobsApplied;
+  newJobsArr.push(req.body.jobsApplied);
+
+  let update = await JobModel.updateOne(
+    { _id: [appliedJobsId] },
+    { $set: { jobsApplied: newJobsArr } }
+  );
+
+  //! "GET" all task based on userid
+  searchResult = await JobModel.find({
+    userid: { $regex: expertiaUser },
+  });
+
+  let sendArr = [];
+  searchResult.map((elem) => {
+    if (elem.userId === expertiaUser) {
+      sendArr = elem.jobsApplied;
+    }
+  });
+
+  return res.status(201).send(sendArr);
+});
+
+//---------------------------------------
+
+//& delete a Job Application
+jobRouter.delete("/:userid/:job", async (req, res) => {
+  const expertiaUser = req.params.userid;
+  const jobRemove = req.params.job;
+
+  //! "GET" all task based on userid
+  let searchResult = await JobModel.find({
+    userid: { $regex: expertiaUser },
+  });
+  let userArr = {};
+  searchResult.map((elem) => {
+    if (elem.userId === expertiaUser) {
+      userArr = elem;
+    }
+  });
+
+  let jobsArr = userArr.jobsApplied;
+  for (let i = 0; i < jobsArr.length; i++) {
+    if (jobsArr[i] === jobRemove) jobsArr.splice(i, 1);
+  }
+
+  //! "UPDATE" jobs array
+  let appliedJobsId = userArr._id;
+  let update = await JobModel.updateOne(
+    { _id: [appliedJobsId] },
+    { $set: { jobsApplied: jobsArr } }
+  );
+
+  //! "GET" all task based on userid
+  searchResult = await JobModel.find({
+    userid: { $regex: expertiaUser },
+  });
+
+  let sendArr = [];
+  searchResult.map((elem) => {
+    if (elem.userId === expertiaUser) {
+      sendArr = elem.jobsApplied;
+    }
+  });
+
+  return res.status(201).send(sendArr);
+});
+
+//---------------------------------------
+
 // Export
 module.exports = jobRouter;

@@ -12,6 +12,7 @@ const cookieParser = require("cookie-parser");
 const connection = require("./db");
 const UserSchema = require("./models/UserModel");
 const authRouter = require("./routes/auth.routes");
+const jobRouter = require("./routes/job.routes");
 
 //---------------------------------------
 // Middleware
@@ -25,6 +26,7 @@ app.use(morgan("dev"));
 dotenv.config();
 
 app.use("/auth", authRouter);
+app.use("/jobs", jobRouter);
 
 //---------------------------------------
 app.get("/", async (req, res) => {

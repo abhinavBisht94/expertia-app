@@ -5,8 +5,6 @@ import axios from 'axios';
 import {
   Box,
   Text,
-  Flex,
-  Image,
   Button,
   FormControl,
   FormLabel,
@@ -16,8 +14,17 @@ import {
   InputGroup,
 } from '@chakra-ui/react';
 
+//~ Routing
+import { useNavigate } from 'react-router-dom';
+
+//~ LINKS
+import { links } from '../API/Links';
+
 export const Login = () => {
-  let link = 'http://localhost:8080/auth/login';
+  let { expertiaLink } = links;
+
+  //! Routing
+  const navigate = useNavigate();
 
   //! password show change state
   const [show, setShow] = useState(false);
@@ -39,18 +46,18 @@ export const Login = () => {
   const handleSubmit = async () => {
     console.log('login user', user);
 
-    let response = await axios.post(link, user).catch(err => {
+    let URL = expertiaLink + `/auth/login`;
+    let response = await axios.post(URL, user).catch(err => {
       console.log('err:', err.response.data.message);
       setShowErr(true);
     });
 
     if (response) {
       setShowErr(false);
-      console.log('response:', response.data[0]);
       localStorage.setItem('expertiaUser', response.data[0]);
-      window.location.reload();
 
-      //todo Navigate to Job Listings
+      //Navigate
+      navigate('/jobListings');
     }
   };
 

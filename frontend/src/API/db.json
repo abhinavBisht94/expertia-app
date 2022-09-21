@@ -2,11 +2,11 @@
   "jobs": [
     {
       "id": 1,
-      "job_name": "Frontend Developer"
+      "job_name": "Frontend-Developer"
     },
     {
       "id": 2,
-      "job_name": "Backend Developer"
+      "job_name": "Backend-Developer"
     },
     {
       "id": 3,
@@ -18,7 +18,7 @@
     },
     {
       "id": 5,
-      "job_name": "Mechanical Engineer"
+      "job_name": "Mechanical-Engineer"
     },
     {
       "id": 6,
@@ -26,17 +26,7 @@
     },
     {
       "id": 7,
-      "job_name": "Electrical Engineer"
+      "job_name": "Electrical-Engineer"
     }
-  ],
-  "comments": [
-    {
-      "id": 1,
-      "body": "some comment",
-      "postId": 1
-    }
-  ],
-  "profile": {
-    "name": "typicode"
-  }
+  ]
 }

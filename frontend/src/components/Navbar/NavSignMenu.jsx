@@ -16,8 +16,14 @@ import {
   MenuDivider,
 } from '@chakra-ui/react';
 
+//~ Routing
+import { useNavigate } from 'react-router-dom';
+
 export const NavSignMenu = () => {
   let userDetails = localStorage.getItem('expertiaUser') || '';
+
+  //! Routing
+  const navigate = useNavigate();
 
   return (
     <VStack>
@@ -36,22 +42,32 @@ export const NavSignMenu = () => {
         </MenuButton>
         <MenuList>
           {!userDetails ? (
-            <>
-              <MenuItem>
-                {/* <Link1 to="/login">Log In</Link1> */}
-                <p>Log In</p>
+            <Box>
+              <MenuItem
+                onClick={() => {
+                  console.log('login');
+                  navigate(`/login`);
+                }}
+              >
+                Log In
               </MenuItem>
+
               <MenuDivider />
-              <MenuItem>
-                {/* <Link1 to="/signup">Sign up</Link1> */}
-                <p>Sign up</p>
+
+              <MenuItem
+                onClick={() => {
+                  navigate(`/signup`);
+                }}
+              >
+                Sign up
               </MenuItem>
-            </>
+            </Box>
           ) : (
             <MenuItem
               onClick={() => {
                 localStorage.removeItem('expertiaUser');
-                window.location.reload();
+                navigate(`/`);
+                // window.location.reload();
               }}
             >
               Sign Out
