@@ -48,22 +48,43 @@ jobRouter.post("/:userid", async (req, res) => {
   });
 
   //! "UPDATE" that particular user's job application
-  let appliedJobsId = userArr._id;
+  let appliedJobsId;
+  let newJobsArr;
+  if (userArr._id !== undefined) {
+    appliedJobsId = userArr._id;
 
-  let newJobsArr = userArr.jobsApplied;
-  newJobsArr.push(req.body.jobsApplied);
+    newJobsArr = userArr.jobsApplied;
+    newJobsArr.push(req.body.jobsApplied);
 
-  let update = await JobModel.updateOne(
-    { _id: [appliedJobsId] },
-    { $set: { jobsApplied: newJobsArr } }
-  );
+    let update = await JobModel.updateOne(
+      { _id: [appliedJobsId] },
+      { $set: { jobsApplied: newJobsArr } }
+    );
+  } else {
+    let tempSend = {
+      userId: expertiaUser,
+      jobsApplied: [req.body.jobsApplied],
+    };
+
+    // let newInsert = await JobModel.insertOne(tempSend);
+
+    const sendTask = await new JobModel(tempSend);
+    sendTask.save((err, success) => {
+      if (err) {
+        res.status(500).send({ message: "Error occurred" });
+      }
+      console.log("success:", success);
+    });
+
+    return res.status(201).send([req.body.jobsApplied]);
+  }
 
   //! "GET" all task based on userid
+  let sendArr = [];
   searchResult = await JobModel.find({
     userid: { $regex: expertiaUser },
   });
 
-  let sendArr = [];
   searchResult.map((elem) => {
     if (elem.userId === expertiaUser) {
       sendArr = elem.jobsApplied;
@@ -72,6 +93,22 @@ jobRouter.post("/:userid", async (req, res) => {
 
   return res.status(201).send(sendArr);
 });
+
+async function basicGet() {
+  //! "GET" all task based on userid
+  let sendArr = [];
+  searchResult = await JobModel.find({
+    userid: { $regex: expertiaUser },
+  }).then(() => {
+    searchResult.map((elem) => {
+      if (elem.userId === expertiaUser) {
+        sendArr = elem.jobsApplied;
+      }
+    });
+
+    return res.status(201).send(sendArr);
+  });
+}
 
 //---------------------------------------
 
